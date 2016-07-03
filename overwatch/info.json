@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "Phantium",
+    "INSTALL_MSG" : "\nMessage from Phantium:\nThanks for using my Overwatch cog!\nUse `[p]ow battletag#1234` for quick play and `[p]owc battletag#1234` for competitive statistics!",
+    "NAME" : "Overwatch",
+    "SHORT" : "Quick Play and Competitive Overwatch stats",
+    "DESCRIPTION" : "Quick Play and Competitive Overwatch stats"
+}
