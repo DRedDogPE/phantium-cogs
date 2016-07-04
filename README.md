@@ -18,5 +18,6 @@ Shows random images from websites.
 
 **Python requirements:** *lxml*
 
+**Commands:**  
 **[p]**randomcat - Shows random image from http://random.cat  
 **[p]**randomdog - Shows random image from http://random.dog
