@@ -22,7 +22,6 @@ class Overwatch:
 
     async def caching(self, ctx, type, battletag):
         battletag = battletag.replace("#", "-")
-        battletag = battletag[0].upper() + battletag[1:]
         user_api = self.api_url + battletag + "/stats/" + type
 
         global cache
@@ -102,7 +101,6 @@ class Overwatch:
             return
 
         battletag = battletag.replace("#", "-")
-        battletag = battletag[0].upper() + battletag[1:]
         owos = cache[battletag]["data"]["overall_stats"]
         owgs = cache[battletag]["data"]["game_stats"]
 
