@@ -1,5 +1,5 @@
 # phantium-cogs
-Cogs for Red-DiscordBot
+Phantium's cogs for Red-DiscordBot
 
 overwatch
 =====
@@ -15,6 +15,8 @@ Lookups are cached by default for 30 minutes before requesting fresh data from o
 randomimages
 =====
 Shows random images from websites.  
+
+**Python requirements:** *lxml*
 
 **[p]**randomcat - Shows random image from http://random.cat  
 **[p]**randomdog - Shows random image from http://random.dog
