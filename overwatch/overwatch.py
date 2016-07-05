@@ -33,8 +33,8 @@ class Overwatch:
             cache[type] = {}
 
         if cache[type].get(battletag):
-
             # Cleanup old cache items when the command is called
+            # TODO: Improve cache code
             c_remove = {}
             for count, (types, players) in enumerate(cache.items()):
                 for player, data in players.items():
@@ -55,7 +55,6 @@ class Overwatch:
 
                     cache[type][battletag] = {}
                     cache[type][battletag]["updated"] = str(ctx.message.timestamp)
-                    cache[type][battletag]["data"] = {}
                     cache[type][battletag]["data"] = ow
                 except:
                     return {"error": 408, "msg": "Connection to Overwatch API timed out"}
@@ -77,7 +76,6 @@ class Overwatch:
 
             cache[type][battletag] = {}
             cache[type][battletag]["updated"] = str(ctx.message.timestamp)
-            cache[type][battletag]["data"] = {}
             cache[type][battletag]["data"] = ow
 
         return cache[type]
@@ -92,21 +90,21 @@ class Overwatch:
             return
 
         # Get quick play cache
-        cache = await self.caching(ctx, "general", battletag)
+        ow_cache = await self.caching(ctx, "general", battletag)
 
-        error = cache.get("error")
-        msg = cache.get("msg")
+        error = ow_cache.get("error")
+        msg = ow_cache.get("msg")
         if error:
             await self.bot.say("Error {}: {}".format(error, msg.title()))
             return
 
         battletag = battletag.replace("#", "-")
-        owos = cache[battletag]["data"]["overall_stats"]
-        owgs = cache[battletag]["data"]["game_stats"]
+        owos = ow_cache[battletag]["data"]["overall_stats"]
+        owgs = ow_cache[battletag]["data"]["game_stats"]
 
         p_battletag = battletag.replace("-", "#")
         p_level = owos.get("level", 0)
-        p_rank = str(owos.get("comprank", "0")).replace("None", "Unranked")
+        p_rank = str(owos.get("comprank", "Unranked")).replace("None", "Unranked")
         p_kills = int(owgs.get("solo_kills", 0))
         p_eliminations = int(owgs.get("eliminations", 0))
         p_damage = int(owgs.get("damage_done", 0))
@@ -120,11 +118,12 @@ class Overwatch:
         p_medals_silver = int(owgs.get("medals_silver", 0))
         p_medals_bronze = int(owgs.get("medals_bronze", 0))
 
-        message = "```Overwatch (Quick Play) stats for {}```\n```Level: {}\nSkill Rating: {}\nKills: {:,}\nEliminations: {:,}\n" \
-                  "Deaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\nGames played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
-            p_battletag, p_level, p_rank, p_kills, p_eliminations, p_deaths,
-            p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
-            p_medals_gold, p_medals_silver, p_medals_bronze)
+        message = "```Overwatch (Quick Play) stats for {}```\n```Level: {}\nSkill Rating: {}\nKills: {:,}\n" \
+                "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
+                "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
+                p_battletag, p_level, p_rank, p_kills, p_eliminations, p_deaths,
+                p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
+                p_medals_gold, p_medals_silver, p_medals_bronze)
 
         await self.bot.say(message)
 
@@ -137,22 +136,21 @@ class Overwatch:
             return
 
         # Get competitive cache
-        cache = await self.caching(ctx, "competitive", battletag)
+        owc_cache = await self.caching(ctx, "competitive", battletag)
 
-        error = cache.get("error")
-        msg = cache.get("msg")
+        error = owc_cache.get("error")
+        msg = owc_cache.get("msg")
         if error:
             await self.bot.say("Error {}: {}".format(error, msg.title()))
             return
 
         battletag = battletag.replace("#", "-")
-        battletag = battletag[0].upper() + battletag[1:]
-        owos = cache[battletag]["data"]["overall_stats"]
-        owgs = cache[battletag]["data"]["game_stats"]
+        owos = owc_cache[battletag]["data"]["overall_stats"]
+        owgs = owc_cache[battletag]["data"]["game_stats"]
 
         p_battletag = battletag.replace("-", "#")
         p_level = owos.get("level", 0)
-        p_rank = str(owos.get("comprank", "0")).replace("None", "Unranked")
+        p_rank = str(owos.get("comprank", "Unranked")).replace("None", "Unranked")
         p_kills = int(owgs.get("solo_kills", 0))
         p_eliminations = int(owgs.get("eliminations", 0))
         p_damage = int(owgs.get("damage_done", 0))
@@ -166,11 +164,12 @@ class Overwatch:
         p_medals_silver = int(owgs.get("medals_silver", 0))
         p_medals_bronze = int(owgs.get("medals_bronze", 0))
 
-        message = "```Overwatch (Competitive) stats for {}```\n```Level: {}\nSkill Rating: {}\nKills: {:,}\nEliminations: {:,}\n" \
-                  "Deaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\nGames played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
-            p_battletag, p_level, p_rank, p_kills, p_eliminations, p_deaths,
-            p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
-            p_medals_gold, p_medals_silver, p_medals_bronze)
+        message = "```Overwatch (Competitive) stats for {}```\n```Level: {}\nSkill Rating: {}\nKills: {:,}\n" \
+                "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
+                "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
+                p_battletag, p_level, p_rank, p_kills, p_eliminations, p_deaths,
+                p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
+                p_medals_gold, p_medals_silver, p_medals_bronze)
 
         await self.bot.say(message)
 
