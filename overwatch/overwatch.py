@@ -13,6 +13,7 @@ cache = None
 # Player data cache time
 cache_time = 1800
 
+
 class Overwatch:
     """Overwatch statistics."""
 
@@ -80,7 +81,6 @@ class Overwatch:
 
         return cache[type]
 
-
     @commands.command(pass_context=True, name="ow", aliases=["overwatch"])
     async def ow(self, ctx, battletag):
         """Gets overwatch quick play statistics."""
@@ -102,28 +102,29 @@ class Overwatch:
         owos = ow_cache[battletag]["data"]["overall_stats"]
         owgs = ow_cache[battletag]["data"]["game_stats"]
 
-        p_battletag = battletag.replace("-", "#")
-        p_level = owos.get("level", 0)
+        p_battletag = str(battletag.replace("-", "#"))
+        p_level = int(owos.get("level", 0))
+        p_prestige = str(owos.get("prestige", "0")).replace("0", "")
         p_rank = str(owos.get("comprank", "Unranked")).replace("None", "Unranked")
         p_kills = int(owgs.get("solo_kills", 0))
         p_eliminations = int(owgs.get("eliminations", 0))
         p_damage = int(owgs.get("damage_done", 0))
         p_healing = int(owgs.get("healing_done", 0))
         p_deaths = int(owgs.get("deaths", 0))
-        p_kpd = owgs.get("kpd", 0)
-        p_winrate = owos.get("win_rate", 0)
-        p_games = owos.get("games", 0)
+        p_kpd = float(owgs.get("kpd", 0))
+        p_winrate = int(owos.get("win_rate", 0))
+        p_games = int(owos.get("games", 0))
         p_medals = int(owgs.get("medals", 0))
         p_medals_gold = int(owgs.get("medals_gold", 0))
         p_medals_silver = int(owgs.get("medals_silver", 0))
         p_medals_bronze = int(owgs.get("medals_bronze", 0))
 
-        message = "```Overwatch (Quick Play) stats for {}```\n```Level: {}\nSkill Rating: {}\nKills: {:,}\n" \
-                "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
-                "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
-                p_battletag, p_level, p_rank, p_kills, p_eliminations, p_deaths,
-                p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
-                p_medals_gold, p_medals_silver, p_medals_bronze)
+        message = "```Overwatch (Quick Play) stats for {}```\n```Level: {}{}\nSkill Rating: {}\nKills: {:,}\n" \
+                  "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
+                  "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
+                    p_battletag, p_prestige, p_level, p_rank, p_kills, p_eliminations, p_deaths,
+                    p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
+                    p_medals_gold, p_medals_silver, p_medals_bronze)
 
         await self.bot.say(message)
 
@@ -148,28 +149,29 @@ class Overwatch:
         owos = owc_cache[battletag]["data"]["overall_stats"]
         owgs = owc_cache[battletag]["data"]["game_stats"]
 
-        p_battletag = battletag.replace("-", "#")
-        p_level = owos.get("level", 0)
+        p_battletag = str(battletag.replace("-", "#"))
+        p_level = int(owos.get("level", 0))
+        p_prestige = str(owos.get("prestige", "0")).replace("0", "")
         p_rank = str(owos.get("comprank", "Unranked")).replace("None", "Unranked")
         p_kills = int(owgs.get("solo_kills", 0))
         p_eliminations = int(owgs.get("eliminations", 0))
         p_damage = int(owgs.get("damage_done", 0))
         p_healing = int(owgs.get("healing_done", 0))
         p_deaths = int(owgs.get("deaths", 0))
-        p_kpd = owgs.get("kpd", 0)
-        p_winrate = owos.get("win_rate", 0)
-        p_games = owos.get("games", 0)
+        p_kpd = float(owgs.get("kpd", 0))
+        p_winrate = int(owos.get("win_rate", 0))
+        p_games = int(owos.get("games", 0))
         p_medals = int(owgs.get("medals", 0))
         p_medals_gold = int(owgs.get("medals_gold", 0))
         p_medals_silver = int(owgs.get("medals_silver", 0))
         p_medals_bronze = int(owgs.get("medals_bronze", 0))
 
-        message = "```Overwatch (Competitive) stats for {}```\n```Level: {}\nSkill Rating: {}\nKills: {:,}\n" \
-                "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
-                "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
-                p_battletag, p_level, p_rank, p_kills, p_eliminations, p_deaths,
-                p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
-                p_medals_gold, p_medals_silver, p_medals_bronze)
+        message = "```Overwatch (Competitive) stats for {}```\n```Level: {}{}\nSkill Rating: {}\nKills: {:,}\n" \
+                  "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
+                  "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
+                    p_battletag, p_prestige, p_level, p_rank, p_kills, p_eliminations, p_deaths,
+                    p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
+                    p_medals_gold, p_medals_silver, p_medals_bronze)
 
         await self.bot.say(message)
 
