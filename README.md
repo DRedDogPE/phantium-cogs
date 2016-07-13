@@ -20,8 +20,9 @@ Lookups are cached by default for 30 minutes before requesting fresh data from o
 
 **Commands:**  
 **[p]**ow battletag#1234 - Displays a players quick play statistics.  
-**[p]**owc battletag#1234 - Displays a players competitive statistics.
+**[p]**owc battletag#1234 - Displays a players competitive statistics.  
 
+![](http://i.raw.re/xa5Ot)
 
 # randomimages
 
