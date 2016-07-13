@@ -9,7 +9,7 @@ Phantium's cogs for Red-DiscordBot
 **[p]**cog list phantium-cogs
 
 **Install a cog:**  
-**[p]**cog install overwatch
+**[p]**cog install phantium-cogs overwatch
 
 ---
 # overwatch
