@@ -21,9 +21,9 @@ class Overwatch:
         self.bot = bot
         self.api_url = "https://owapi.net/api/v2/u/"
 
-    async def caching(self, ctx, type, battletag):
+    async def caching(self, ctx, type, battletag, platform, region):
         battletag = battletag.replace("#", "-")
-        user_api = self.api_url + battletag + "/stats/" + type
+        user_api = self.api_url + battletag + "/stats/" + type + "?platform=" + platform + "&region=" + region
 
         global cache
         global cache_time
@@ -82,7 +82,7 @@ class Overwatch:
         return cache[type]
 
     @commands.command(pass_context=True, name="ow", aliases=["overwatch"])
-    async def ow(self, ctx, battletag):
+    async def ow(self, ctx, battletag, platform="pc", region="eu"):
         """Gets overwatch quick play statistics."""
 
         if "-" in battletag:
@@ -90,7 +90,7 @@ class Overwatch:
             return
 
         # Get quick play cache
-        ow_cache = await self.caching(ctx, "general", battletag)
+        ow_cache = await self.caching(ctx, "general", battletag, platform, region)
 
         error = ow_cache.get("error")
         msg = ow_cache.get("msg")
@@ -119,17 +119,17 @@ class Overwatch:
         p_medals_silver = int(owgs.get("medals_silver", 0))
         p_medals_bronze = int(owgs.get("medals_bronze", 0))
 
-        message = "```Overwatch (Quick Play) stats for {}```\n```Level: {}{}\nSkill Rating: {}\nKills: {:,}\n" \
+        message = "```Overwatch (Quick Play) stats for {} ({} {})``````Level: {}{}\nSkill Rating: {}\nKills: {:,}\n" \
                   "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
                   "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
-                    p_battletag, p_prestige, p_level, p_rank, p_kills, p_eliminations, p_deaths,
+                    p_battletag, region, platform, p_prestige, p_level, p_rank, p_kills, p_eliminations, p_deaths,
                     p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
                     p_medals_gold, p_medals_silver, p_medals_bronze)
 
         await self.bot.say(message)
 
     @commands.command(pass_context=True, name="owc", aliases=["owcomp"])
-    async def owc(self, ctx, battletag):
+    async def owc(self, ctx, battletag, platform="pc", region="eu"):
         """Gets overwatch competitive statistics."""
 
         if "-" in battletag:
@@ -137,7 +137,7 @@ class Overwatch:
             return
 
         # Get competitive cache
-        owc_cache = await self.caching(ctx, "competitive", battletag)
+        owc_cache = await self.caching(ctx, "competitive", battletag, platform, region)
 
         error = owc_cache.get("error")
         msg = owc_cache.get("msg")
@@ -166,10 +166,10 @@ class Overwatch:
         p_medals_silver = int(owgs.get("medals_silver", 0))
         p_medals_bronze = int(owgs.get("medals_bronze", 0))
 
-        message = "```Overwatch (Competitive) stats for {}```\n```Level: {}{}\nSkill Rating: {}\nKills: {:,}\n" \
+        message = "```Overwatch (Competitive) stats for {} ({} {})``````Level: {}{}\nSkill Rating: {}\nKills: {:,}\n" \
                   "Eliminations: {:,}\nDeaths: {:,}\nK/D: {}\nDamage done: {:,}\nHealing done: {:,}\nWinrate: {}%\n" \
                   "Games played: {:,}\nMedals earned: {:,} (G: {:,} S: {:,} B: {:,})```".format(
-                    p_battletag, p_prestige, p_level, p_rank, p_kills, p_eliminations, p_deaths,
+                    p_battletag, region, platform, p_prestige, p_level, p_rank, p_kills, p_eliminations, p_deaths,
                     p_kpd, p_damage, p_healing, p_winrate, p_games, p_medals,
                     p_medals_gold, p_medals_silver, p_medals_bronze)
 
